@@ -1,81 +1,194 @@
-// Initialize date input with today's date
-document.getElementById('date').valueAsDate = new Date();
+/* ========================================
+   EXPENSE TRACKER - JAVASCRIPT
+   Easy to understand code with clear comments
+   ======================================== */
 
-// Expenses array
-let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+// ========================================
+// 1. DOM ELEMENTS - References to HTML elements
+// ========================================
 
-// Chart instances
+const expenseForm = document.getElementById('expenseForm');
+const amountInput = document.getElementById('amount');
+const categoryInput = document.getElementById('category');
+const descriptionInput = document.getElementById('description');
+const dateInput = document.getElementById('date');
+const categoryFilterSelect = document.getElementById('categoryFilter');
+const expensesContainer = document.getElementById('expensesContainer');
+const totalSpentElement = document.getElementById('totalSpent');
+const expenseCountElement = document.getElementById('expenseCount');
+const avgExpenseElement = document.getElementById('avgExpense');
+
+// ========================================
+// 2. STATE - Data management
+// ========================================
+
+// Array to store all expenses
+let expenses = [];
+
+// Chart instances for updates
 let categoryChart = null;
 let trendsChart = null;
 
-// Form submission
-document.getElementById('expenseForm').addEventListener('submit', (e) => {
-    e.preventDefault();
+// ========================================
+// 3. INITIALIZATION - Run when page loads
+// ========================================
 
-    const expense = {
-        id: Date.now(),
-        amount: parseFloat(document.getElementById('amount').value),
-        category: document.getElementById('category').value,
-        description: document.getElementById('description').value,
-        date: document.getElementById('date').value
+function initializeApp() {
+    // Set today's date in the date input
+    dateInput.valueAsDate = new Date();
+
+    // Load expenses from browser storage
+    loadExpenses();
+
+    // Display all data on page load
+    updateDisplay();
+}
+
+// ========================================
+// 4. DATA MANAGEMENT - Save and load data
+// ========================================
+
+/**
+ * Load expenses from localStorage
+ * localStorage keeps data even after browser closes
+ */
+function loadExpenses() {
+    const savedData = localStorage.getItem('expenses');
+    expenses = savedData ? JSON.parse(savedData) : [];
+}
+
+/**
+ * Save expenses to localStorage
+ */
+function saveExpenses() {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+}
+
+// ========================================
+// 5. EVENT LISTENERS - Handle user actions
+// ========================================
+
+// When user submits the form to add expense
+expenseForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Create new expense object
+    const newExpense = {
+        id: Date.now(), // Unique ID using timestamp
+        amount: parseFloat(amountInput.value),
+        category: categoryInput.value,
+        description: descriptionInput.value,
+        date: dateInput.value
     };
 
-    expenses.push(expense);
-    localStorage.setItem('expenses', JSON.stringify(expenses));
+    // Add to expenses array
+    expenses.push(newExpense);
 
-    // Reset form
-    document.getElementById('expenseForm').reset();
-    document.getElementById('date').valueAsDate = new Date();
+    // Save to browser storage
+    saveExpenses();
 
+    // Clear form for next entry
+    expenseForm.reset();
+    dateInput.valueAsDate = new Date();
+
+    // Update all displays
     updateDisplay();
 });
 
-// Delete expense
+// When user changes the category filter
+categoryFilterSelect.addEventListener('change', () => {
+    updateDisplay();
+});
+
+// ========================================
+// 6. EXPENSE OPERATIONS - Add, delete, filter
+// ========================================
+
+/**
+ * Delete an expense by ID
+ * @param {number} id - The expense ID to delete
+ */
 function deleteExpense(id) {
+    // Ask user to confirm
     if (confirm('Are you sure you want to delete this expense?')) {
-        expenses = expenses.filter(exp => exp.id !== id);
-        localStorage.setItem('expenses', JSON.stringify(expenses));
+        // Remove expense from array
+        expenses = expenses.filter(expense => expense.id !== id);
+
+        // Save changes
+        saveExpenses();
+
+        // Refresh display
         updateDisplay();
     }
 }
 
-// Update all displays
+/**
+ * Get filtered expenses based on selected category
+ * @returns {array} Filtered expenses array
+ */
+function getFilteredExpenses() {
+    const selectedCategory = categoryFilterSelect.value;
+
+    // If no category selected, return all expenses
+    if (!selectedCategory) {
+        return expenses;
+    }
+
+    // Return only expenses matching selected category
+    return expenses.filter(expense => expense.category === selectedCategory);
+}
+
+// ========================================
+// 7. DISPLAY UPDATES - Update UI with data
+// ========================================
+
+/**
+ * Update all displays on the page
+ * Called whenever data changes
+ */
 function updateDisplay() {
-    updateStats();
+    updateStatistics();
     updateExpensesTable();
     updateCharts();
 }
 
-// Update statistics
-function updateStats() {
+/**
+ * Update the statistics boxes (Total, Count, Average)
+ */
+function updateStatistics() {
     const filtered = getFilteredExpenses();
-    const total = filtered.reduce((sum, exp) => sum + exp.amount, 0);
+
+    // Calculate total amount
+    const total = filtered.reduce((sum, expense) => sum + expense.amount, 0);
+
+    // Count number of expenses
     const count = filtered.length;
+
+    // Calculate average
     const average = count > 0 ? total / count : 0;
 
-    document.getElementById('totalSpent').textContent = `₨${total.toFixed(2)}`;
-    document.getElementById('expenseCount').textContent = count;
-    document.getElementById('avgExpense').textContent = `₨${average.toFixed(2)}`;
+    // Update HTML with calculated values
+    totalSpentElement.textContent = `₨${total.toFixed(2)}`;
+    expenseCountElement.textContent = count;
+    avgExpenseElement.textContent = `₨${average.toFixed(2)}`;
 }
 
-// Get filtered expenses
-function getFilteredExpenses() {
-    const selectedCategory = document.getElementById('categoryFilter').value;
-    if (!selectedCategory) return expenses;
-    return expenses.filter(exp => exp.category === selectedCategory);
-}
-
-// Update expenses table
+/**
+ * Update the expenses table with current data
+ */
 function updateExpensesTable() {
     const filtered = getFilteredExpenses();
+
+    // Sort by newest date first
     const sorted = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    // Show message if no expenses
     if (sorted.length === 0) {
-        document.getElementById('expensesContainer').innerHTML = 
-            '<div class="no-data">No expenses found</div>';
+        expensesContainer.innerHTML = '<div class="no-data">No expenses found</div>';
         return;
     }
 
+    // Build HTML table
     let html = `
         <table class="expenses-table">
             <thead>
@@ -90,42 +203,60 @@ function updateExpensesTable() {
             <tbody>
     `;
 
-    sorted.forEach(exp => {
-        const catClass = `cat-${exp.category.toLowerCase()}`;
+    // Add each expense as a table row
+    sorted.forEach(expense => {
+        const categoryClass = `cat-${expense.category.toLowerCase()}`;
+        const formattedDate = new Date(expense.date).toLocaleDateString();
+
         html += `
             <tr>
-                <td>${new Date(exp.date).toLocaleDateString()}</td>
-                <td><span class="category-badge ${catClass}">${exp.category}</span></td>
-                <td>${exp.description || '—'}</td>
-                <td class="amount">₨${exp.amount.toFixed(2)}</td>
-                <td><button class="delete-btn" onclick="deleteExpense(${exp.id})">Delete</button></td>
+                <td>${formattedDate}</td>
+                <td><span class="category-badge ${categoryClass}">${expense.category}</span></td>
+                <td>${expense.description || '—'}</td>
+                <td class="amount">₨${expense.amount.toFixed(2)}</td>
+                <td><button class="btn btn--delete" onclick="deleteExpense(${expense.id})">Delete</button></td>
             </tr>
         `;
     });
 
     html += '</tbody></table>';
-    document.getElementById('expensesContainer').innerHTML = html;
+
+    // Insert into page
+    expensesContainer.innerHTML = html;
 }
 
-// Update charts
+// ========================================
+// 8. CHARTS - Display visual data
+// ========================================
+
+/**
+ * Update both charts
+ */
 function updateCharts() {
     updateCategoryChart();
     updateTrendsChart();
 }
 
-// Category chart
+/**
+ * Update the category pie chart
+ * Shows spending breakdown by category
+ */
 function updateCategoryChart() {
+    // Calculate total for each category
     const categories = {};
-    expenses.forEach(exp => {
-        categories[exp.category] = (categories[exp.category] || 0) + exp.amount;
+    expenses.forEach(expense => {
+        categories[expense.category] = (categories[expense.category] || 0) + expense.amount;
     });
 
+    // Get canvas element
     const ctx = document.getElementById('categoryChart').getContext('2d');
-    
+
+    // Destroy old chart if it exists
     if (categoryChart) {
         categoryChart.destroy();
     }
 
+    // Create new chart
     categoryChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -152,34 +283,49 @@ function updateCategoryChart() {
     });
 }
 
-// Trends chart
+/**
+ * Update the trends line chart
+ * Shows spending over the last 7 days
+ */
 function updateTrendsChart() {
+    // Create object for last 7 days
     const last7Days = {};
     const today = new Date();
-    
+
+    // Initialize each day with 0
     for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(date.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
-        last7Days[dateStr] = 0;
+        const dateString = date.toISOString().split('T')[0];
+        last7Days[dateString] = 0;
     }
 
-    expenses.forEach(exp => {
-        if (last7Days.hasOwnProperty(exp.date)) {
-            last7Days[exp.date] += exp.amount;
+    // Add expenses to corresponding dates
+    expenses.forEach(expense => {
+        if (last7Days.hasOwnProperty(expense.date)) {
+            last7Days[expense.date] += expense.amount;
         }
     });
 
+    // Get canvas element
     const ctx = document.getElementById('trendsChart').getContext('2d');
-    
+
+    // Destroy old chart if it exists
     if (trendsChart) {
         trendsChart.destroy();
     }
 
+    // Create new chart
     trendsChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: Object.keys(last7Days).map(d => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+            // Format dates for display (e.g., "Jun 20")
+            labels: Object.keys(last7Days).map(dateStr => {
+                return new Date(dateStr).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }),
             datasets: [{
                 label: 'Daily Spending',
                 data: Object.values(last7Days),
@@ -204,6 +350,7 @@ function updateTrendsChart() {
                 y: {
                     beginAtZero: true,
                     ticks: {
+                        // Format y-axis labels with currency
                         callback: function(value) {
                             return '₨' + value.toFixed(0);
                         }
@@ -214,10 +361,9 @@ function updateTrendsChart() {
     });
 }
 
-// Filter change event
-document.getElementById('categoryFilter').addEventListener('change', () => {
-    updateDisplay();
-});
+// ========================================
+// 9. START THE APPLICATION
+// ========================================
 
-// Initial display
-updateDisplay();
+// Run initialization when page loads
+initializeApp();
