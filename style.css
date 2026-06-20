@@ -1,0 +1,571 @@
+/* ========================================
+   RESET & BASE STYLES
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 16px;
+    color: #333;
+}
+
+/* ========================================
+   CONTAINER & LAYOUT
+   ======================================== */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Grid layout for 2 columns - responsive */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* Add space before charts section */
+.content-grid:last-of-type {
+    margin-top: 40px;
+}
+
+/* Full width element spanning all columns */
+.full-width {
+    grid-column: 1 / -1;
+    margin-top: 40px;
+}
+
+/* ========================================
+   HEADER STYLES
+   ======================================== */
+
+.header {
+    background: white;
+    padding: 32px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.header__title {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.header__subtitle {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+
+.header__info {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.header__info p {
+    margin: 0;
+}
+
+/* ========================================
+   CARD STYLES
+   ======================================== */
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card__title {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 12px;
+}
+
+/* ========================================
+   STATISTICS SECTION
+   ======================================== */
+
+.stats-card {
+    grid-column: 1 / -1;
+    margin-bottom: 40px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.stats__item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stats__label {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.stats__value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ========================================
+   FORM STYLES
+   ======================================== */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form__group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.form__input,
+.form__select,
+.form__textarea {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form__input:focus,
+.form__select:focus,
+.form__textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+}
+
+.form__textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ========================================
+   BUTTON STYLES
+   ======================================== */
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn--primary:active {
+    transform: translateY(0);
+}
+
+.btn--delete {
+    background: #e74c3c;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    width: auto;
+}
+
+.btn--delete:hover {
+    background: #c0392b;
+}
+
+/* ========================================
+   FILTER STYLES
+   ======================================== */
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ========================================
+   EXPENSES TABLE STYLES
+   ======================================== */
+
+.expenses-container {
+    overflow-x: auto;
+}
+
+.expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.expenses-table thead {
+    background: #f5f5f5;
+}
+
+.expenses-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    font-size: 0.9rem;
+}
+
+.expenses-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.expenses-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.expenses-table .amount {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+/* ========================================
+   CATEGORY BADGE STYLES
+   ======================================== */
+
+.category-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+}
+
+.cat-food { background: #f39c12; }
+.cat-transport { background: #3498db; }
+.cat-entertainment { background: #9b59b6; }
+.cat-utilities { background: #1abc9c; }
+.cat-health { background: #e74c3c; }
+.cat-education { background: #16a085; }
+.cat-other { background: #95a5a6; }
+
+/* ========================================
+   EMPTY STATE & NO DATA
+   ======================================== */
+
+.empty-state,
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* ========================================
+   CHART STYLES
+   ======================================== */
+
+.chart-card {
+    margin-top: 40px;
+}
+
+.chart {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - TABLET (768px and below)
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Adjust spacing for tablets */
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 0;
+    }
+
+    .header {
+        padding: 24px 16px;
+        margin-bottom: 24px;
+    }
+
+    .header__title {
+        font-size: 2rem;
+    }
+
+    .header__subtitle {
+        font-size: 0.9rem;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .content-grid:last-of-type {
+        margin-top: 32px;
+    }
+
+    /* Stack stats to single column on tablets */
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-card {
+        margin-bottom: 32px;
+    }
+
+    .full-width {
+        margin-top: 32px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card__title {
+        font-size: 1.3rem;
+        margin-bottom: 16px;
+    }
+
+    .form {
+        gap: 14px;
+    }
+
+    .btn {
+        padding: 11px 20px;
+    }
+
+    .expenses-table {
+        font-size: 0.85rem;
+    }
+
+    .expenses-table th,
+    .expenses-table td {
+        padding: 10px;
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - MOBILE (480px and below)
+   ======================================== */
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+        background-attachment: fixed;
+    }
+
+    .header {
+        padding: 20px 12px;
+        margin-bottom: 16px;
+    }
+
+    .header__title {
+        font-size: 1.5rem;
+    }
+
+    .header__subtitle {
+        font-size: 0.85rem;
+    }
+
+    .header__info {
+        font-size: 0.8rem;
+    }
+
+    .card {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .card__title {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .content-grid {
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .content-grid:last-of-type {
+        margin-top: 24px;
+    }
+
+    .chart-card {
+        margin-top: 24px;
+    }
+
+    /* Stack stats vertically */
+    .stats {
+        gap: 12px;
+    }
+
+    .stats__item {
+        padding: 16px;
+    }
+
+    .stats-card {
+        margin-bottom: 24px;
+    }
+
+    .full-width {
+        margin-top: 24px;
+    }
+
+    .stats__label {
+        font-size: 0.75rem;
+    }
+
+    .stats__value {
+        font-size: 1.5rem;
+    }
+
+    .form__group {
+        gap: 4px;
+    }
+
+    .form__label {
+        font-size: 0.85rem;
+    }
+
+    .form__input,
+    .form__select,
+    .form__textarea {
+        padding: 10px;
+        font-size: 1rem; /* Prevents zoom on iOS */
+    }
+
+    .form__textarea {
+        min-height: 80px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    /* Make table responsive on mobile */
+    .expenses-table {
+        font-size: 0.75rem;
+    }
+
+    .expenses-table th,
+    .expenses-table td {
+        padding: 8px 4px;
+    }
+
+    .category-badge {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+
+    .btn--delete {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
+
+    .chart {
+        height: 250px;
+    }
+
+    .empty-state,
+    .no-data {
+        padding: 30px 16px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   EXTRA SMALL SCREENS (Below 360px)
+   ======================================== */
+
+@media (max-width: 360px) {
+    .header__title {
+        font-size: 1.3rem;
+    }
+
+    .stats__value {
+        font-size: 1.3rem;
+    }
+
+    .card__title {
+        font-size: 1rem;
+    }
+
+    .expenses-table {
+        font-size: 0.7rem;
+    }
+
+    .btn--delete {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+}
