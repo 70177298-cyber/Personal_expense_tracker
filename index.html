@@ -8,46 +8,50 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 </head>
 <body>
+    <!-- Main container for the entire application -->
     <div class="container">
-        <header>
-            <h1>💰 Personal Finance Tracker</h1>
-            <p>Manage your expenses and track your spending</p>
-            <div class="student-info">
-                <p>Student: Araz Ahmad | ID: 70177298</p>
+        
+        <!-- Header section with title and user info -->
+        <header class="header">
+            <h1 class="header__title">💰 Personal Finance Tracker</h1>
+            <p class="header__subtitle">Manage your expenses and track your spending</p>
+            <div class="header__info">
+                <p>Name: Faraz Ahmad | ID: 70177298</p>
             </div>
         </header>
 
-        <!-- Statistics -->
-        <div class="card">
-            <div class="stats-container">
-                <div class="stat-box">
-                    <div class="stat-label">Total Spent</div>
-                    <div class="stat-value" id="totalSpent">₨0.00</div>
+        <!-- Statistics section showing summary -->
+        <section class="card stats-card">
+            <div class="stats">
+                <div class="stats__item">
+                    <p class="stats__label">Total Spent</p>
+                    <p class="stats__value" id="totalSpent">₨0.00</p>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Total Expenses</div>
-                    <div class="stat-value" id="expenseCount">0</div>
+                <div class="stats__item">
+                    <p class="stats__label">Total Expenses</p>
+                    <p class="stats__value" id="expenseCount">0</p>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Average Expense</div>
-                    <div class="stat-value" id="avgExpense">₨0.00</div>
+                <div class="stats__item">
+                    <p class="stats__label">Average Expense</p>
+                    <p class="stats__value" id="avgExpense">₨0.00</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Form and Filters -->
-        <div class="main-content">
+        <!-- Main content: Form and Filters -->
+        <div class="content-grid">
+            
             <!-- Add Expense Form -->
-            <div class="card">
-                <h2>Add New Expense</h2>
-                <form id="expenseForm">
-                    <div class="form-group">
-                        <label for="amount">Amount (₨)</label>
-                        <input type="number" id="amount" required min="0" step="0.01" placeholder="Enter amount">
+            <section class="card form-card">
+                <h2 class="card__title">Add New Expense</h2>
+                <form id="expenseForm" class="form">
+                    <div class="form__group">
+                        <label for="amount" class="form__label">Amount (₨)</label>
+                        <input type="number" id="amount" class="form__input" required min="0" step="0.01" placeholder="Enter amount">
                     </div>
-                    <div class="form-group">
-                        <label for="category">Category</label>
-                        <select id="category" required>
+                    <div class="form__group">
+                        <label for="category" class="form__label">Category</label>
+                        <select id="category" class="form__select" required>
                             <option value="">Select Category</option>
                             <option value="Food">🍔 Food</option>
                             <option value="Transport">🚗 Transport</option>
@@ -58,24 +62,24 @@
                             <option value="Other">📌 Other</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description (Optional)</label>
-                        <textarea id="description" placeholder="Enter expense description"></textarea>
+                    <div class="form__group">
+                        <label for="description" class="form__label">Description (Optional)</label>
+                        <textarea id="description" class="form__textarea" placeholder="Enter expense description"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                        <input type="date" id="date" required>
+                    <div class="form__group">
+                        <label for="date" class="form__label">Date</label>
+                        <input type="date" id="date" class="form__input" required>
                     </div>
-                    <button type="submit">Add Expense</button>
+                    <button type="submit" class="btn btn--primary">Add Expense</button>
                 </form>
-            </div>
+            </section>
 
-            <!-- Filters -->
-            <div class="card">
-                <h2>Filters</h2>
-                <div class="filter-group">
-                    <label for="categoryFilter">Filter by Category</label>
-                    <select id="categoryFilter">
+            <!-- Filters Section -->
+            <section class="card filter-card">
+                <h2 class="card__title">Filters</h2>
+                <div class="filter">
+                    <label for="categoryFilter" class="form__label">Filter by Category</label>
+                    <select id="categoryFilter" class="form__select">
                         <option value="">All Categories</option>
                         <option value="Food">🍔 Food</option>
                         <option value="Transport">🚗 Transport</option>
@@ -86,32 +90,32 @@
                         <option value="Other">📌 Other</option>
                     </select>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <!-- Expenses List -->
-        <div class="card full-width">
-            <h2>Recent Expenses</h2>
-            <div id="expensesContainer">
-                <div class="no-data">No expenses added yet. Start by adding your first expense!</div>
+        <!-- Expenses List Section -->
+        <section class="card expenses-card full-width">
+            <h2 class="card__title">Recent Expenses</h2>
+            <div id="expensesContainer" class="expenses-container">
+                <div class="empty-state">No expenses added yet. Start by adding your first expense!</div>
             </div>
-        </div>
+        </section>
 
-        <!-- Charts -->
-        <div class="main-content">
-            <div class="card">
-                <h2>Spending by Category</h2>
-                <div class="chart-container">
+        <!-- Charts Section -->
+        <div class="content-grid">
+            <section class="card chart-card">
+                <h2 class="card__title">Spending by Category</h2>
+                <div class="chart">
                     <canvas id="categoryChart"></canvas>
                 </div>
-            </div>
+            </section>
 
-            <div class="card">
-                <h2>Recent Trends</h2>
-                <div class="chart-container">
+            <section class="card chart-card">
+                <h2 class="card__title">Recent Trends</h2>
+                <div class="chart">
                     <canvas id="trendsChart"></canvas>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 
